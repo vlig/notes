@@ -40,20 +40,20 @@ sudo -e /etc/rc.conf
 `# dhclient hn0`<br>
 - - -
 #### mount [cyberciti.biz](http://www.cyberciti.biz/faq/mounting-harddisks-in-freebsd-with-mount-command/)
-`ls /dev` - файлы устройств, распознанных системой
-`egrep 'da[0-9]|cd[0-9]' /var/run/dmesg.boot` или `# camcontrol devlist` - список дисковых накопителей
-`mount` или `df -h` - список примонтированных ФС
-`mount -u -o rw <mount_point>` - перемонтировать ФС, если она в режиме "только чтение"
-`umount <mount_point>` - отмонтировать
-`# mkdir /mnt/cd;  mount_cd9660  /dev/cd0 /mnt/cd` или `mount -t cd9660` - примонтировать CD/DVD
-`# mkdir /mnt/usb; mount_msdosfs /dev/da0 /mnt/usb` или `mount -t msdosfs` - примонтировать FAT32-флешку
-`# mount /mnt/...` - команда монтирования после добавления в __/etc/fstab__:
+`ls /dev` - файлы устройств, распознанных системой<br>
+`egrep 'da[0-9]|cd[0-9]' /var/run/dmesg.boot` или `# camcontrol devlist` - список дисковых накопителей<br>
+`mount` или `df -h` - список примонтированных ФС<br>
+`mount -u -o rw <mount_point>` - перемонтировать ФС, если она в режиме "только чтение"<br>
+`umount <mount_point>` - отмонтировать<br>
+`# mkdir /mnt/cd;  mount_cd9660  /dev/cd0 /mnt/cd` или `mount -t cd9660` - примонтировать CD/DVD<br>
+`# mkdir /mnt/usb; mount_msdosfs /dev/da0 /mnt/usb` или `mount -t msdosfs` - примонтировать FAT32-флешку<br>
+`# mount /mnt/...` - команда монтирования после добавления в __/etc/fstab__:<br>
 ```
 /dev/cd0     /mnt/cd      cd9660     ro,noauto     0 0
 /dev/da0     /mnt/usb     msdosfs    rw,noauto     0 0   # для одной подключённой FAT32-флешки
 ```
 ###### Монтирование CD/DVD или FAT32-разделов без root-прав
-Пользователь должен состоять в группе __operator__: ``pw groupmod operator -m `whoami` ``.
+Пользователь должен состоять в группе __operator__: ``pw groupmod operator -m `whoami` ``.<br>
 __operator__ - группа, дающая права на перезагрузку/выключение, монтирование CD-ROM/флешки.
 ```
 # sysctl -w vfs.usermount=1       # добавить в /etc/sysctl.conf
@@ -140,8 +140,7 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 ##### Проверка записанного образа (контрольная сумма) [unix.stackexchange.com](https://unix.stackexchange.com/questions/75483/how-to-check-if-the-iso-was-written-to-my-usb-stick-without-errors#comment749548_272821)
 `head -c $(stat -f %z the.iso) /dev/sdc | shasum -a 256`   # для Linux `stat -c '%s'` и `sha256sum`
 `shasum -a 256 -c CHECKSUM-the.iso.SHA256`   # подсчёт и сверка к.с. образа с прилагаемым файлом с уже подсчитанной к.с.
-
-Скачивание и установка обновлений системы безопасности:
+- - -
 ##### ОБНОВЛЕНИЕ [taer-naguur.blogspot.ru](http://taer-naguur.blogspot.ru/2015/05/freebsd10x-update-from-source.html) [vniz.net](http://vniz.net/svn.html) [Handbook](https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html) [housecomputer.ru](http://housecomputer.ru/os/unix/bsd/freebsd/updating_freebsd.html#.D0.A8.D0.B0.D0.B3_2:_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.BB.D1.8F_.D1.8F.D0.B4.D1.80.D0.B0) [FreeBSD Documentation Project Primer for New Contributors](https://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/working-copy-choosing-directory.html)
 Скачивание и установка обновлений системы безопасности:<br>
 `# freebsd-update fetch install` - # не предназначено для веток STABLE и CURRENT!<br>
@@ -242,6 +241,7 @@ mv /boot/kernel /boot/kernel.bak && mv /boot/kernel.mykernel /boot/kernel   # п
 `strings /boot/kernel.old/kernel | tail`<br>
 
 ```
+- - -
 /usr/local/etc/pkg/repos/FreeBSD.conf:
 FreeBSD: {
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest"
@@ -251,4 +251,4 @@ FreeBSD: {
 
 #### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
 `cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean` - или внести `M..=yes` в __make.conf__
-
+- - -
