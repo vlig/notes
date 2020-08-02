@@ -1,5 +1,3 @@
-``Oh you want FIVE backticks? ````` You'll need SIX to lead/trail, then :)``
-
 [Команды Freebsd](http://vds-admin.ru/unix-commands) - man'ы на русском<br>
 [Dualboot Windows и FreeBSD](http://unix1.jinr.ru/~lavr/dual/dualboot.html)<br>
 [FreeBSD installed. Your Next Five Moves Should be…](http://twisteddaemon.com/post/92921205276/freebsd-installed-your-next-five-moves-should)
@@ -113,4 +111,30 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 `mount_smbfs //<win-user>@<win-host>/<shared_folder> /mnt`<br>
 Для автоматического монтирования общей папки при загрузке системы, в файл __/etc/fstab__ следует добавить строку:<br>
 `//<win-user>@<win-host>/<shared_folder>   /mnt   smbfs   rw,-N,-f660   0   0`
-
+- - -
+#### Работа с дисками [linux.cpms.ru](http://linux.cpms.ru/?p=8183) [lists.freebsd.org](https://lists.freebsd.org/pipermail/freebsd-questions/2011-December/236442.html) [rtfm.co.ua](http://rtfm.co.ua/freebsd-gpart-primer-raboty-s-diskami/) [handbook](https://www.freebsd.org/doc/handbook/geom-glabel.html)
+`sysctl kern.disks`   # список подключенных дисков<br>
+`geom disk list`
+`ls /dev/da*`   # список подключённых USB-дисков<br>
+`gpart show`   # список размеченных дисков<br>
+`gpart show -p ada5`   # список разделов диска ada5; `-p` - отобразить имена устройств, вместо индексов разделов<br>
+`gpart list`   # подробная информация о дисках и разделах<br>
+`gpart destroy -F ada5`   # удалить сущ. таблицу разделов (не только GPT); `-F` используется, если без него ошибка<br>
+`gpart delete -i 3 ada5`   # удалить раздел на диске ada5; `-i` - индекс раздела<br>
+`gpart create -s gpt ada5`   #1. Создать схему (геометрию) GPT на диске<br>
+`gpart bootcode -b /boot/pmbr ada5`   #2. Создать таблицу разделов формата GPT на диске ada5<br>
+`gpart add -t freebsd-swap -a 8 -s 4gb ada5`   #3. Создать swap-раздел, `-s` - размером 4Гб , `-a 8` - выравнивание для дисков Advanced Format в режиме эмуляции 512 байтных секторов (используется в дисках WD)<br>
+`gpart add -t freebsd-ufs -l var -a 8 -s 10gb ada5`   #4. (см. #3) UFS-раздел, c меткой var, 10Гб<br>
+`gpart add -t freebsd-ufs -a 8 ada5`   #5. (см. #3) UFS-раздел, на всё доступное пространство<br>
+`newfs -j -L метка ada5p1`   6. Создать новую ФС / форматирование раздела; `-U` - включить Soft Updates; `-j` - включить журналирование Soft Updates (FreeBSD 9 и выше); `-L` - метка тома, позволяет монтировать ФС из /dev/ufs/метка, без привязки к имени контроллера и номеру порта<br>
+`tunefs -p /dev/da0p1`   # информация о файловой системе;<br>
+`tunefs -L метка /dev/da0p1`   # создать/изменить ФС-зависимую метку для не примонтированного раздела da0p1 (в /dev/ФС);<br>
+`tunefs -L "" /dev/da0p1`   # очистить ... ;<br>
+`glabel label -v метка /dev/da0p1`   # создать/изменить ФС-независимую метку для раздела da0p1 (в /dev/label);<br>
+`glabel clear -v da0p1`   # очистить ... ;<br>
+`glabel status`   # просмотр всех меток всех разделов; вновь созданные gpt-метки появятся после перезагрузки;<br>
+`gpart modify -i1 -l метка da0`   # создать/изменить gpt-метку раздела da0p1 (в /dev/gpt); появляются в /dev/gpt только если:<br>
+1) после создания метки система перезагружена; 2) раздел не примонтирован или примонтирован по /dev/gpt/метка (также см. /etc/fstab).<br>
+Для создания файловых систем ext2/3/4 нужно установить порт/пакет __e2fsprogs__ (см. man):<br>
+`mke2fs -t ext4 /dev/da0p1`
+- - -
