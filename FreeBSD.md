@@ -23,7 +23,7 @@
 `gzip -dc /path/to/dump.dmp.gz | restore -if -` - если дамп сжатый<br>
 - - -
 #### СЕТЬ [freebsd.org](https://www.freebsd.org/doc/handbook/network-aggregation.html)
-##### WiFi [unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
+###### WiFi [unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
 ```
 sysctl net.wlan.devices
 pciconv -lv
@@ -54,7 +54,7 @@ sudo -e /etc/rc.conf
 /dev/cd0     /mnt/cd      cd9660     ro,noauto     0 0
 /dev/da0     /mnt/usb     msdosfs    rw,noauto     0 0   # для одной подключённой FAT32-флешки
 ```
-##### Монтирование CD/DVD или FAT32-разделов без root-прав
+###### Монтирование CD/DVD или FAT32-разделов без root-прав
 Пользователь должен состоять в группе __operator__: ``pw groupmod operator -m `whoami` ``.
 __operator__ - группа, дающая права на перезагрузку/выключение, монтирование CD-ROM/флешки.
 ```
@@ -69,13 +69,13 @@ __operator__ - группа, дающая права на перезагрузк
   devfs_system_ruleset="system"   # или "localrules" ???
 mount_<filesystem> /dev/... ~/mnt/...
 ```
-##### Монтирование ext2/3/4-разделов [linux.cpms.ru](http://linux.cpms.ru/?p=7875)
+###### Монтирование ext2/3/4-разделов [linux.cpms.ru](http://linux.cpms.ru/?p=7875)
 ```
 pkg install fusefs-ext4fuse
 # kldload fuse ; echo 'fuse_load="YES"' >> /boot/loader.conf   # если не сделано ранее
 # ext4fuse /dev/<ext-partition> <mount_point>
 ```
-##### Монтирование NTFS-разделов [bsdportal.ru](http://www.bsdportal.ru/viewtopic.php?f=58&amp;t=27153) [forums.freebsd.org](https://forums.freebsd.org/threads/how-to-use-ntfs-3g-as-a-simple-user-not-root.2458/)
+###### Монтирование NTFS-разделов [bsdportal.ru](http://www.bsdportal.ru/viewtopic.php?f=58&amp;t=27153) [forums.freebsd.org](https://forums.freebsd.org/threads/how-to-use-ntfs-3g-as-a-simple-user-not-root.2458/)
 ```
 pkg install fusefs-ntfs
 echo 'fuse_load="YES"' >> /boot/loader.conf
@@ -84,5 +84,33 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 # kldload fuse
 # ntfs-3g /dev/<ntfs-partition> <mount_point>
 ```
-##### Монтирование NTFS-разделов без root-прав (спорно!)
+###### Монтирование NTFS-разделов без root-прав (спорно!)
 Установить SUID-флаг на ntfs-3g: [ntfs-3g suid-flag](https://www.google.ru/search?q=ntfs-3g+suid-flag&amp;oq=ntfs-3g+suid-flag&amp;gs_l=serp.3...2353.11277.0.12038.18.12.3.0.0.0.144.922.10j1.11.0....0...1c.1.64.serp..6.12.713.Yj8H7v3KbjA) [tuxera.com](http://www.tuxera.com/community/ntfs-3g-faq/#useroption), [gentoo-wiki.info](http://www.gentoo-wiki.info/NTFS-3G#ntfs-3g_with_suid_bit)
+- - -
+#### Установка часового пояса
+`# ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime`
+#### Создание dat-файлов для fortune [скрипт не работает](http://bradthemad.org/tech/notes/fortune_makefile.php)
+`for i in *; do strfile "$i" "$i.dat"; done`
+- - -
+#### Монтирование Общей папки из Windows-компьютера [forums.freebsd.org](https://forums.freebsd.org/threads/filesharing-with-freebsd-10-x-as-virtualbox-guest-on-win7-64bit-host.51180/#post-287631) [lissyara.su](http://www.lissyara.su/articles/freebsd/file_system/mount_smbfs/) [netunix.ru](http://www.netunix.ru/index.php/administration/6-mountshare-page)
+Используются: Windows 7, кодировка Windows-1251 (CP1251); FreeBSD 10.2, кодировка ru_RU.UTF-8. На Win-компьютере должна быть общая папка с общим доступом.<br>
+Подключение вручную (тестирование доступа к общей папке):<br>
+`mount_smbfs -I ip_адрес_или_домен -E utf8:cp1251 //<user>@<win-host>/<shared_folder> /mnt`<br>
+Здесь `-E utf8:cp1251` - для адекватного отображения кириллических имён файлов.<br>
+Если всё в порядке, FreeBSD попросит ввести пароль пользователя Windows. Также возможно потребуется настройка фаерволла Windows на входящие сообщения от FreeBSD.
+```
+# vim /etc/nsmb.conf   # соблюдая регистр (кроме пароля)
+   [default]
+   [WIN_HOST]
+   addr=<IP_ADDRESS_OR_DOMAIN>
+   [<WIN-HOST>:<WIN-USER>]
+   charsets=utf8:cp1251
+   password=<encrypted_win_password>
+```
+Значение параметра `encrypted_win_password` можно получить следующей командой:<br>
+` smbutil crypt <unencrypted_password>` - использование пробела перед командой исключает её из истории<br>
+Теперь общая папка монтируется проще (по сравнению с командой из п.3), и без запроса пароля:<br>
+`mount_smbfs //<win-user>@<win-host>/<shared_folder> /mnt`<br>
+Для автоматического монтирования общей папки при загрузке системы, в файл __/etc/fstab__ следует добавить строку:<br>
+`//<win-user>@<win-host>/<shared_folder>   /mnt   smbfs   rw,-N,-f660   0   0`
+
