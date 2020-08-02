@@ -1,0 +1,2 @@
+# notes
+info from everywhere
