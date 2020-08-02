@@ -134,6 +134,115 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 `glabel clear -v da0p1`   # очистить ... ;<br>
 `glabel status`   # просмотр всех меток всех разделов; вновь созданные gpt-метки появятся после перезагрузки;<br>
 `gpart modify -i1 -l метка da0`   # создать/изменить gpt-метку раздела da0p1 (в /dev/gpt); появляются в /dev/gpt только если: после создания метки система перезагружена; раздел не примонтирован или примонтирован по /dev/gpt/метка (также см. /etc/fstab).<br>
-Для создания файловых систем ext2/3/4 нужно установить порт/пакет __e2fsprogs__ (см. man):<br>
+Для создания файловых систем ext2/3/4 нужно установить порт/пакет __e2fsprogs__:<br>
 `mke2fs -t ext4 /dev/da0p1`
 - - -
+##### Проверка записанного образа (контрольная сумма) [unix.stackexchange.com](https://unix.stackexchange.com/questions/75483/how-to-check-if-the-iso-was-written-to-my-usb-stick-without-errors#comment749548_272821)
+`head -c $(stat -f %z the.iso) /dev/sdc | shasum -a 256`   # для Linux `stat -c '%s'` и `sha256sum`
+`shasum -a 256 -c CHECKSUM-the.iso.SHA256`   # подсчёт и сверка к.с. образа с прилагаемым файлом с уже подсчитанной к.с.
+
+Скачивание и установка обновлений системы безопасности:
+##### ОБНОВЛЕНИЕ [taer-naguur.blogspot.ru](http://taer-naguur.blogspot.ru/2015/05/freebsd10x-update-from-source.html) [vniz.net](http://vniz.net/svn.html) [Handbook](https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html) [housecomputer.ru](http://housecomputer.ru/os/unix/bsd/freebsd/updating_freebsd.html#.D0.A8.D0.B0.D0.B3_2:_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.BB.D1.8F_.D1.8F.D0.B4.D1.80.D0.B0) [FreeBSD Documentation Project Primer for New Contributors](https://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/working-copy-choosing-directory.html)
+Скачивание и установка обновлений системы безопасности:<br>
+`# freebsd-update fetch install` - # не предназначено для веток STABLE и CURRENT!<br>
+`pkg install ca_root_nss`<br>
+( co = checkout , up = update , sw = switch )<br>
+```
+# svnlite co https://svn.freebsd.org/base/stable/12/ /usr/src
+# svnlite co https://svn.freebsd.org/ports/head/ /usr/ports
+# svnlite co https://svn.FreeBSD.org/doc/head /usr/doc
+```
+[официальные репозитории исходников ядра в дальнейшем](http://blog.tavda.net/2012/09/subversion-freebsd.html) только обновлять:
+`# svnlite up /usr/ports`
+для переключения на другой репозиторий:
+```
+# svnlite info /usr/src | grep URL   # узнать адрес текущего репозитория
+# svnlite sw https://svn.freebsd.org/base/stable/12 /usr/src
+# svnlite up /usr/src   # обновление исходников ядра
+```
+`cd /usr/src ; less UPDATING` - ознакомиться перед обновлением<br>
+```vim /etc/make.conf
+  CPUTYPE?=native     # автоматическое определение типа процессора и доступных оптимизаций
+```
+`# ln -s /root/kernels/MYKERNEL /usr/src/sys/amd64/conf/` - создать симв. ссылку на файл конфигурации собственного ядра, если GENERIC не устраивает
+В MYKERNEL удобно использовать:<br>
+```
+include GENERIC   # дальше описываются лишь различия от GENERIC
+ident MYKERNEL
+options ...   # или nooptions
+device ...   # или nodevice
+```
+Либо скопировать GENERIC:<br>
+`# cd /usr/src/sys/amd64/conf; cp GENERIC MYKERNEL; vi MYKERNEL`<br>
+Можно создать файл со всеми возможными опциями ядра (без описания) для справки:<br>
+`# cd /usr/src/sys/amd64/conf && make LINT`<br>
+```
+# chflags -R noschg /usr/obj/* ; rm -rf /usr/obj   # чистка от старых obj-файлов
+# cd /usr/src ; make -j2 buildworld   # запуск компиляции базовой системы; -j2 ускоряет процесс (в 2 потока)
+# make -j2 buildkernel KERNCONF=MYKERNEL   # запуск компиляции ядра
+# make installkernel KERNCONF=MYKERNEL   # установка скомпилированного ядра
+# shutdown now   # перезагрузка в однопользовательский режим
+# mount -u / ; mount -a -t ufs ; swapon -a   # если система установлена на UFS
+# либо
+# zfs set readonly=off zroot ; zfs mount -a   # если система установлена на ZFS
+# adjkerntz -i   # если системные часы установлены в локальное время
+# cp -Rp /etc /etc.bak   # резервная копия /etc
+# mergemaster -p   # первоначальное обновление конфигурационных файлов /etc (https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html#mergemaster); для интерактивного слияния файлов, ранее изменённых лично, следует выбирать вариант "m"
+# cd /usr/src ; make installworld   # установка скомпилированной базовой системы из /usr/obj
+# mergemaster -iFU   # окончательное обновление конфигурационных файлов /etc
+# cd /usr/src ; make check-old ; yes|make delete-old   # очистка от старых (потенциально опасных) файлов без запросов на удаление
+# reboot
+# portmaster -L ; portmaster -a   # обновить все порты (https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html#make-delete-old), либо:
+# portmaster --no-confirm -ybda   # обновить все порты без вопросов (http://forum.lissyara.su/viewtopic.php?t=42311)
+# cd /usr/src ; yes|make delete-old-libs   # очистка от старых библиотек
+```
+__/usr/src/UPDATING__<br>
+Перед обновлением до мажорной версии следует сперва обновить текущую.<br>
+###### Наиболее безопасный способ сборки ядра:
+```
+make kernel-toolchain
+make -DALWAYS_CHECK_MAKE buildkernel KERNCONF=YOUR_KERNEL_HERE
+make -DALWAYS_CHECK_MAKE installkernel KERNCONF=YOUR_KERNEL_HERE
+```
+###### Проверка наличия новой версии RELENG
+`svnlite cat https://svn.freebsd.org/base/releng/12.1/sys/conf/newvers.sh | grep -B2 BRANCH=\"`
+Установочные образы: [ftp-archive.freebsd.org](ftp://ftp-archive.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/)
+
+##### ОБНОВЛЕНИЕ УДАЛЁННО
+[FreeBSD 10 удаленное обновление ядра и мира](http://www.fryaha.ru/freebsd-10-update-world-kernel) [Удаленная сборка и установка ядра FreeBSD](http://vds-admin.ru/freebsd/udalennaya-sborka-i-ustanovka-yadra) [Remote FreeBSD server upgrade - Guide! '09](http://daemonforums.org/showthread.php?t=2836)
+```
+cp -Rp /boot/kernel /boot/kernel.good   # резервная копия текущего (работающего корректно) ядра
+cd /usr/src ; make -j2 buildkernel KERNCONF="MYKERNEL GENERIC"   # последовательная сборка нескольких ядер, если нужно
+make installkernel KERNCONF=MYKERNEL
+make installkernel KODIR=/boot/kernel.generic   # дополнительно: установка ядра GENERIC в отдельный каталог
+```
+Перед обновлением мира остановить все сервисы кроме sshd и сети (dhcpd):<br>
+```
+sockstat ; ps aux   # проанализировать вывод команд и выявить запущенные сервисы
+service service stop   # cron devd moused ntpd powerd sendmail syslogd nginx ...
+cp -Rp /etc /etc.bak   # и так далее…
+````
+Контроль за процессом сборки мира (варианты):
+использовать screen; вернуться в сессию после восстановления связи с сервером: screen -dr
+make buildworld && mail -s "Buildworld successful!"
+make -DNO_CLEAN buildworld                  # продолжить процесс сборки, если он был прерван
+file /usr/obj/usr/src/usr.sbin/zzz/zzz*     # наличие файла указывает на корректное завершение сборки мира
+
+Проверка запуска системы с новым ядром
+cd /usr/src ; make KERNCONF=MYKERNEL buildkernel
+make installkernel KERNCONF=MYKERNEL KODIR=/boot/kernel.mykernel
+nextboot -k kernel.mykernel     # следующая перезагрузка - с указанным ядром
+reboot
+mv /boot/kernel /boot/kernel.bak && mv /boot/kernel.mykernel /boot/kernel     # при корректной работе системы
+В случае неудачи потеряется связь с сервером! Удалённая принудительная перезагрузка запустит систему с прежним (рабочим) ядром.
+Определение версии установленных ядeр (например /boot/kernel.old):
+strings /boot/kernel.old/kernel | tail
+
+/usr/local/etc/pkg/repos/FreeBSD.conf:
+FreeBSD: {
+  url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest"
+}
+Обновления будут приходить чаще.
+
+Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
+cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean     # или внести M..=yes в make.conf
