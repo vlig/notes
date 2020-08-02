@@ -2,7 +2,8 @@
 [Dualboot Windows и FreeBSD](http://unix1.jinr.ru/~lavr/dual/dualboot.html)<br>
 [FreeBSD installed. Your Next Five Moves Should be…](http://twisteddaemon.com/post/92921205276/freebsd-installed-your-next-five-moves-should)
 - - -
-#### Восстанавливать консоль после закрытия полноэкранных приложений (less, vi) [superuser.com](https://superuser.com/a/1248727) [forums.freebsd.org](https://forums.freebsd.org/threads/bash-returning-from-vim.8726/#post-51511)
+#### Восстанавливать консоль после закрытия полноэкранных приложений (less, vi)
+[superuser.com](https://superuser.com/a/1248727) [forums.freebsd.org](https://forums.freebsd.org/threads/bash-returning-from-vim.8726/#post-51511)
 ```
 # vim /usr/share/misc/termcap  # или ~/.termcap
   xterm-256color|xterm alias 3:\ :Co#256:pa#32767:\ :AB=\E[48;5;%dm:AF=\E[38;5;%dm:tc=xterm-new:\ :te=\E[2J\E[?47l\E8:ti=\E7\E[?47h::tc=xterm-xfree86:
@@ -10,7 +11,8 @@
 ^D
 ```
 - - -
-#### dump/restore [Handbook](https://www.freebsd.org/doc/ru_RU.KOI8-R/books/faq/disks.html#idp71930832) [lissyara.su](http://www.lissyara.su/?id=2157) [nix-sa.blogspot.com](http://nix-sa.blogspot.com/2011/09/dump-restore.html)
+#### dump/restore
+[Handbook](https://www.freebsd.org/doc/ru_RU.KOI8-R/books/faq/disks.html#idp71930832) [lissyara.su](http://www.lissyara.su/?id=2157) [nix-sa.blogspot.com](http://nix-sa.blogspot.com/2011/09/dump-restore.html)<br>
 точки монтирования берутся только из __/etc/fstab__ (монтирование вручную не учитывается), можно указывать /dev/...<br>
 `dump -0aLf /path/to/dump.dmp <mount_point>` - без сжатия<br>
 `dump -0aLf - <mount_point> | gzip > /path/to/dump.dmp.gz` - со сжатием, `-f -` - запись в стандартный вывод<br>
@@ -20,8 +22,10 @@
 `restore -if /path/to/dump.dmp` - если дамп не сжатый<br>
 `gzip -dc /path/to/dump.dmp.gz | restore -if -` - если дамп сжатый<br>
 - - -
-#### СЕТЬ [freebsd.org](https://www.freebsd.org/doc/handbook/network-aggregation.html)
-###### WiFi [unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
+#### СЕТЬ
+[freebsd.org](https://www.freebsd.org/doc/handbook/network-aggregation.html)
+###### WiFi
+[unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
 ```
 sysctl net.wlan.devices
 pciconv -lv
@@ -39,7 +43,8 @@ sudo -e /etc/rc.conf
 Временно подключить сеть по DHCP (live-cd):<br>
 `# dhclient hn0`<br>
 - - -
-#### mount [cyberciti.biz](http://www.cyberciti.biz/faq/mounting-harddisks-in-freebsd-with-mount-command/)
+#### mount
+[cyberciti.biz](http://www.cyberciti.biz/faq/mounting-harddisks-in-freebsd-with-mount-command/)<br>
 `ls /dev` - файлы устройств, распознанных системой<br>
 `egrep 'da[0-9]|cd[0-9]' /var/run/dmesg.boot` или `# camcontrol devlist` - список дисковых накопителей<br>
 `mount` или `df -h` - список примонтированных ФС<br>
@@ -67,13 +72,15 @@ __operator__ - группа, дающая права на перезагрузк
   devfs_system_ruleset="system"   # или "localrules" ???
 mount_<filesystem> /dev/... ~/mnt/...
 ```
-###### Монтирование ext2/3/4-разделов [linux.cpms.ru](http://linux.cpms.ru/?p=7875)
+###### Монтирование ext2/3/4-разделов
+[linux.cpms.ru](http://linux.cpms.ru/?p=7875)
 ```
 pkg install fusefs-ext4fuse
 # kldload fuse ; echo 'fuse_load="YES"' >> /boot/loader.conf   # если не сделано ранее
 # ext4fuse /dev/<ext-partition> <mount_point>
 ```
-###### Монтирование NTFS-разделов [bsdportal.ru](http://www.bsdportal.ru/viewtopic.php?f=58&amp;t=27153) [forums.freebsd.org](https://forums.freebsd.org/threads/how-to-use-ntfs-3g-as-a-simple-user-not-root.2458/)
+###### Монтирование NTFS-разделов
+[bsdportal.ru](http://www.bsdportal.ru/viewtopic.php?f=58&amp;t=27153) [forums.freebsd.org](https://forums.freebsd.org/threads/how-to-use-ntfs-3g-as-a-simple-user-not-root.2458/)
 ```
 pkg install fusefs-ntfs
 echo 'fuse_load="YES"' >> /boot/loader.conf
@@ -87,10 +94,12 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 - - -
 #### Установка часового пояса
 `# ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime`
-#### Создание dat-файлов для fortune [скрипт не работает](http://bradthemad.org/tech/notes/fortune_makefile.php)
+#### Создание dat-файлов для fortune
+[скрипт по ссылке не работает](http://bradthemad.org/tech/notes/fortune_makefile.php)<br>
 `for i in *; do strfile "$i" "$i.dat"; done`
 - - -
-#### Монтирование Общей папки из Windows-компьютера [forums.freebsd.org](https://forums.freebsd.org/threads/filesharing-with-freebsd-10-x-as-virtualbox-guest-on-win7-64bit-host.51180/#post-287631) [lissyara.su](http://www.lissyara.su/articles/freebsd/file_system/mount_smbfs/) [netunix.ru](http://www.netunix.ru/index.php/administration/6-mountshare-page)
+#### Монтирование Общей папки из Windows-компьютера
+[forums.freebsd.org](https://forums.freebsd.org/threads/filesharing-with-freebsd-10-x-as-virtualbox-guest-on-win7-64bit-host.51180/#post-287631) [lissyara.su](http://www.lissyara.su/articles/freebsd/file_system/mount_smbfs/) [netunix.ru](http://www.netunix.ru/index.php/administration/6-mountshare-page)<br>
 Используются: Windows 7, кодировка Windows-1251 (CP1251); FreeBSD 10.2, кодировка ru_RU.UTF-8. На Win-компьютере должна быть общая папка с общим доступом.<br>
 Подключение вручную (тестирование доступа к общей папке):<br>
 `mount_smbfs -I ip_адрес_или_домен -E utf8:cp1251 //<user>@<win-host>/<shared_folder> /mnt`<br>
@@ -112,7 +121,8 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 Для автоматического монтирования общей папки при загрузке системы, в файл __/etc/fstab__ следует добавить строку:<br>
 `//<win-user>@<win-host>/<shared_folder>   /mnt   smbfs   rw,-N,-f660   0   0`
 - - -
-#### Работа с дисками [linux.cpms.ru](http://linux.cpms.ru/?p=8183) [lists.freebsd.org](https://lists.freebsd.org/pipermail/freebsd-questions/2011-December/236442.html) [rtfm.co.ua](http://rtfm.co.ua/freebsd-gpart-primer-raboty-s-diskami/) [handbook](https://www.freebsd.org/doc/handbook/geom-glabel.html)
+#### Работа с дисками
+[linux.cpms.ru](http://linux.cpms.ru/?p=8183) [lists.freebsd.org](https://lists.freebsd.org/pipermail/freebsd-questions/2011-December/236442.html) [rtfm.co.ua](http://rtfm.co.ua/freebsd-gpart-primer-raboty-s-diskami/) [handbook](https://www.freebsd.org/doc/handbook/geom-glabel.html)<br>
 `sysctl kern.disks`   # список подключенных дисков<br>
 `geom disk list`
 `ls /dev/da*`   # список подключённых USB-дисков<br>
@@ -137,11 +147,13 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 Для создания файловых систем ext2/3/4 нужно установить порт/пакет __e2fsprogs__:<br>
 `mke2fs -t ext4 /dev/da0p1`
 - - -
-##### Проверка записанного образа (контрольная сумма) [unix.stackexchange.com](https://unix.stackexchange.com/questions/75483/how-to-check-if-the-iso-was-written-to-my-usb-stick-without-errors#comment749548_272821)
+##### Проверка записанного образа (контрольная сумма)
+[unix.stackexchange.com](https://unix.stackexchange.com/questions/75483/how-to-check-if-the-iso-was-written-to-my-usb-stick-without-errors#comment749548_272821)<br>
 `head -c $(stat -f %z the.iso) /dev/sdc | shasum -a 256`   # для Linux `stat -c '%s'` и `sha256sum`
 `shasum -a 256 -c CHECKSUM-the.iso.SHA256`   # подсчёт и сверка к.с. образа с прилагаемым файлом с уже подсчитанной к.с.
 - - -
-##### ОБНОВЛЕНИЕ [taer-naguur.blogspot.ru](http://taer-naguur.blogspot.ru/2015/05/freebsd10x-update-from-source.html) [vniz.net](http://vniz.net/svn.html) [Handbook](https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html) [housecomputer.ru](http://housecomputer.ru/os/unix/bsd/freebsd/updating_freebsd.html#.D0.A8.D0.B0.D0.B3_2:_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.BB.D1.8F_.D1.8F.D0.B4.D1.80.D0.B0) [FreeBSD Documentation Project Primer for New Contributors](https://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/working-copy-choosing-directory.html)
+##### ОБНОВЛЕНИЕ
+[taer-naguur.blogspot.ru](http://taer-naguur.blogspot.ru/2015/05/freebsd10x-update-from-source.html) [vniz.net](http://vniz.net/svn.html) [Handbook](https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/makeworld.html) [housecomputer.ru](http://housecomputer.ru/os/unix/bsd/freebsd/updating_freebsd.html#.D0.A8.D0.B0.D0.B3_2:_.D0.BF.D1.80.D0.B8.D0.BC.D0.B5.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B9_.D0.B4.D0.BB.D1.8F_.D1.8F.D0.B4.D1.80.D0.B0) [FreeBSD Documentation Project Primer for New Contributors](https://www.freebsd.org/doc/en_US.ISO8859-1/books/fdp-primer/working-copy-choosing-directory.html)<br>
 Скачивание и установка обновлений системы безопасности:<br>
 `# freebsd-update fetch install` - # не предназначено для веток STABLE и CURRENT!<br>
 `pkg install ca_root_nss`<br>
@@ -239,9 +251,8 @@ mv /boot/kernel /boot/kernel.bak && mv /boot/kernel.mykernel /boot/kernel   # п
 В случае неудачи потеряется связь с сервером! Удалённая принудительная перезагрузка запустит систему с прежним (рабочим) ядром.
 ###### Определение версии установленных ядeр (например /boot/kernel.old):
 `strings /boot/kernel.old/kernel | tail`<br>
-
-```
 - - -
+```
 /usr/local/etc/pkg/repos/FreeBSD.conf:
 FreeBSD: {
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest"
