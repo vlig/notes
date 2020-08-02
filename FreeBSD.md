@@ -216,7 +216,7 @@ make -DALWAYS_CHECK_MAKE buildkernel KERNCONF=YOUR_KERNEL_HERE
 make -DALWAYS_CHECK_MAKE installkernel KERNCONF=YOUR_KERNEL_HERE
 ```
 ###### Проверка наличия новой версии RELENG
-`svnlite cat https://svn.freebsd.org/base/releng/12.1/sys/conf/newvers.sh | grep -B2 BRANCH=\"`
+`svnlite cat https://svn.freebsd.org/base/releng/12.1/sys/conf/newvers.sh | grep -B2 BRANCH=\"`<br>
 Установочные образы: [ftp-archive.freebsd.org](ftp://ftp-archive.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/)
 
 ##### ОБНОВЛЕНИЕ УДАЛЁННО
@@ -234,7 +234,7 @@ service service stop   # cron devd moused ntpd powerd sendmail syslogd nginx ...
 cp -Rp /etc /etc.bak   # и так далее…
 ````
 ###### Контроль за процессом сборки мира (варианты):
-использовать screen; вернуться в сессию после восстановления связи с сервером: `screen -dr`
+использовать __screen__; вернуться в сессию после восстановления связи с сервером: `screen -dr`
 ```
 make buildworld && mail -s "Buildworld successful!"
 make -DNO_CLEAN buildworld   # продолжить процесс сборки, если он был прерван
