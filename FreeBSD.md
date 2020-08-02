@@ -5,7 +5,7 @@
 #### Восстанавливать консоль после закрытия полноэкранных приложений (less, vi)
 [superuser.com](https://superuser.com/a/1248727) [forums.freebsd.org](https://forums.freebsd.org/threads/bash-returning-from-vim.8726/#post-51511)
 ```
-# vim /usr/share/misc/termcap  # или ~/.termcap
+# vi /usr/share/misc/termcap  # или ~/.termcap
   xterm-256color|xterm alias 3:\ :Co#256:pa#32767:\ :AB=\E[48;5;%dm:AF=\E[38;5;%dm:tc=xterm-new:\ :te=\E[2J\E[?47l\E8:ti=\E7\E[?47h::tc=xterm-xfree86:
 # cap_mkdb /usr/share/misc/termcap
 ^D
@@ -62,13 +62,13 @@ sudo -e /etc/rc.conf
 __operator__ - группа, дающая права на перезагрузку/выключение, монтирование CD-ROM/флешки.
 ```
 # sysctl -w vfs.usermount=1       # добавить в /etc/sysctl.conf
-# vim /etc/devfs.conf   # для CD-ROM
+# vi /etc/devfs.conf   # для CD-ROM
   own     /dev/cd0     root:operator
   perm    /dev/cd0     0660
-# vim /etc/devfs.rules   # для FAT32-флешки
+# vi /etc/devfs.rules   # для FAT32-флешки
   [system=10]   # или "localrules=5" ???
   add path 'da*' mode 0660 group operator
-# vim /etc/rc.conf
+# vi /etc/rc.conf
   devfs_system_ruleset="system"   # или "localrules" ???
 mount_<filesystem> /dev/... ~/mnt/...
 ```
@@ -106,7 +106,7 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 Здесь `-E utf8:cp1251` - для адекватного отображения кириллических имён файлов.<br>
 Если всё в порядке, FreeBSD попросит ввести пароль пользователя Windows. Также возможно потребуется настройка фаерволла Windows на входящие сообщения от FreeBSD.
 ```
-# vim /etc/nsmb.conf   # соблюдая регистр (кроме пароля)
+# vi /etc/nsmb.conf   # соблюдая регистр (кроме пароля)
    [default]
    [WIN_HOST]
    addr=<IP_ADDRESS_OR_DOMAIN>
@@ -252,6 +252,7 @@ mv /boot/kernel /boot/kernel.bak && mv /boot/kernel.mykernel /boot/kernel   # п
 ###### Определение версии установленных ядeр (например /boot/kernel.old):
 `strings /boot/kernel.old/kernel | tail`<br>
 - - -
+#### РАБОТА С ПОРТАМИ/ПАКЕТАМИ
 ```
 /usr/local/etc/pkg/repos/FreeBSD.conf:
 FreeBSD: {
@@ -260,6 +261,32 @@ FreeBSD: {
 ```
 Обновления будут приходить чаще.
 
-#### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
+###### Обновить базу locate:
+`# /etc/periodic/weekly/310.locate` или `# /usr/libexec/locate.updatedb`<br>
+
+###### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
 `cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean` - или внести `M..=yes` в __make.conf__
+
+###### Поиск пакета с неточно известным названием:
+`pkg search -D <pattern>`
+###### Вывод информации о еще не установленном пакете:
+`pkg search -f имя_пакета`
+
+###### Предотвратить переустановку пакета pkg, установленного из портов
+[forums.freebsd.org](https://forums.freebsd.org/threads/pkg-and-options-changed.65535/post-384699)<br>
+Создать личный локальный репозиторий:<br>
+```
+# mkdir -p /usr/local/etc/pkg/repos
+# vi /usr/local/etc/pkg/repos/local.conf
+  local: {
+    url: "file:///usr/ports/packages"
+    enabled: yes
+  }
+# mkdir /usr/ports/packages
+# make -C /usr/ports/sysutils/fusefs-ntfs package
+# pkg repo /usr/ports/packages
+# pkg update
+# pkg install -r local -f fusefs-ntfs
+```
+> Thanks to CONSERVATIVE_UPGRADE pkg will now strongly prefer the local repository over others when looking at mailman and pkg shouldn't try to upgrade it from the FreeBSD repo anymore.
 - - -
