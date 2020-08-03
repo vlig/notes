@@ -295,7 +295,7 @@ FreeBSD: {
 ```
 - - -
 #### Отключить вывод системных сообщений (в т.ч. при (пере)загрузке и выключении)
-[freebsd.org](https://www.freebsd.org/doc/handbook/serialconsole-setup.html)
+[freebsd.org](https://www.freebsd.org/doc/handbook/serialconsole-setup.html)<br>
 `# echo 'console="comconsole"' >> /boot/loader.conf` - включить последовательную консоль
 `# echo 'boot_mute="YES"' >> /boot/loader.conf` - отображение логотипа при загрузке
 
@@ -308,7 +308,7 @@ FreeBSD: {
 ^D
 ```
 #### Если не работает звук Intel HDA
-[opennet.ru](http://www.opennet.ru/openforum/vsluhforumID3/118855.html#80)
+[opennet.ru](http://www.opennet.ru/openforum/vsluhforumID3/118855.html#80)<br>
 Иногда помогает настройка `dev.hdac.0.polling=1` в __/etc/sysctl.conf__.<br>
 Далее настроить устройство, куда звук выводится: `hw.snd.default_unit=0` - обычно для вывода на колонки и `=1` для вывода на наушники.<br>
 Затем проверить сам звук: `cat /dev/random > /dev/dsp`.
