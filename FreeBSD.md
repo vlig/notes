@@ -136,7 +136,7 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 `//<win-user>@<win-host>/<shared_folder>   /mnt   smbfs   rw,-N,-f660   0   0`
 ##### Проверка записанного образа (контрольная сумма)
 [unix.stackexchange.com](https://unix.stackexchange.com/questions/75483/how-to-check-if-the-iso-was-written-to-my-usb-stick-without-errors#comment749548_272821)<br>
-`head -c $(stat -f %z the.iso) /dev/sdc | shasum -a 256`   # для Linux `stat -c '%s'` и `sha256sum`
+`head -c $(stat -f %z the.iso) /dev/sdc | shasum -a 256` - для Linux `stat -c '%s'` и `sha256sum`<br>
 `shasum -a 256 -c CHECKSUM-the.iso.SHA256`   # подсчёт и сверка к.с. образа с прилагаемым файлом с уже подсчитанной к.с.
 - - -
 #### dump/restore
@@ -169,9 +169,9 @@ echo 'fusefs_enable="YES"' >> /etc/rc.conf
 # svnlite sw https://svn.freebsd.org/base/stable/12 /usr/src
 # svnlite up /usr/src   # обновление исходников ядра
 ```
-`cd /usr/src ; less UPDATING` - ознакомиться перед обновлением<br>
+`cd /usr/src ; less UPDATING` - ознакомиться перед обновлением
 ```vim /etc/make.conf
-  CPUTYPE?=native     # автоматическое определение типа процессора и доступных оптимизаций
+  CPUTYPE?=native   # автоматическое определение типа процессора и доступных оптимизаций
 ```
 `# ln -s /root/kernels/MYKERNEL /usr/src/sys/amd64/conf/` - создать симв. ссылку на файл конфигурации собственного ядра, если GENERIC не устраивает
 В MYKERNEL удобно использовать:<br>
