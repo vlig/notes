@@ -11,7 +11,7 @@
 `less /var/run/dmesg.boot`
 #### Информация о совместимости с linux
 `uname -a; sysctl compat.linux | head -2; grep OVERRIDE_LINUX_ /etc/make.conf`
-###### Обновить базу locate
+##### Обновить базу locate
 `# /etc/periodic/weekly/310.locate` или `# /usr/libexec/locate.updatedb`<br>
 #### Установка часового пояса
 `# ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime`
@@ -34,7 +34,7 @@ sudo -e /etc/rc.conf
 ```
 или вручную:<br>
 `wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf && service netif restart`<br>
-Временно подключить сеть по DHCP (live-cd):<br>
+Временно подключить сеть по DHCP (для live-cd):<br>
 `# dhclient hn0`<br>
 - - -
 #### РАБОТА С ДИСКАМИ
