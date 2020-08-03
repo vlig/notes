@@ -22,18 +22,18 @@
 [unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
 ```
 sysctl net.wlan.devices
-pciconv -lv
-kldload iwn   # для нужного модуля и прошивки (если уже не в ядре)
-ifconfig wlan0 create wlandev iwn0
-ifconfig wlan0 up scan
+pciconf -lv
+# kldload iwn   # для нужного модуля и прошивки (если уже не в ядре)
+# ifconfig wlan0 create wlandev iwn0
+# ifconfig wlan0 up scan
 ifconfig wlan0 list scan
 # wpa_passphrase my_ssid my_ssid_password >> /etc/wpa_supplicant.conf
-sudo -e /etc/rc.conf
+# vi /etc/rc.conf
   wlans_iwn0="wlan0"
   ifconfig_wlan0="WPA DHCP"
 ```
 или вручную:<br>
-`wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf && service netif restart`<br>
+`# wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf && service netif restart`<br>
 Временно подключить сеть по DHCP (для live-cd):<br>
 `# dhclient hn0`<br>
 - - -
