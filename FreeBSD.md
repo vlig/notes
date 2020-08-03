@@ -294,6 +294,11 @@ FreeBSD: {
 # rm -Rf /var/db/pkg/* /usr/local/* /usr/ports/distfiles/*
 ```
 - - -
+#### Отключить вывод системных сообщений (в т.ч. при (пере)загрузке и выключении)
+[freebsd.org](https://www.freebsd.org/doc/handbook/serialconsole-setup.html)
+`# echo 'console="comconsole"' >> /boot/loader.conf` - включить последовательную консоль
+`# echo 'boot_mute="YES"' >> /boot/loader.conf` - отображение логотипа при загрузке
+
 #### Восстановить консоль после закрытия полноэкранных приложений (less, vi)
 [superuser.com](https://superuser.com/a/1248727) [forums.freebsd.org](https://forums.freebsd.org/threads/bash-returning-from-vim.8726/#post-51511)
 ```
@@ -307,6 +312,7 @@ FreeBSD: {
 Иногда помогает настройка `dev.hdac.0.polling=1` в __/etc/sysctl.conf__.<br>
 Далее настроить устройство, куда звук выводится: `hw.snd.default_unit=0` - обычно для вывода на колонки и `=1` для вывода на наушники.<br>
 Затем проверить сам звук: `cat /dev/random > /dev/dsp`.
+
 #### Создание dat-файлов для fortune
 [скрипт по ссылке не работает](http://bradthemad.org/tech/notes/fortune_makefile.php)<br>
 `for i in *; do strfile "$i" "$i.dat"; done`
