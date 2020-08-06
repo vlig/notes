@@ -1,5 +1,5 @@
 #### Видео
-`pkg install drm-legacy-kmod gpu-firmware-kmod xf86-video-intel libva-intel-driver` - исправление тиринга [forums.freebsd.org](https://forums.freebsd.org/threads/drm-next-kmod-screen-tearing.66159/#post-390453) [Handbook](https://www.freebsd.org/doc/handbook/x-config.html)
+`pkg install drm-legacy-kmod gpu-firmware-kmod xf86-video-intel libva-intel-driver` - исправление тиринга [forums.freebsd.org](https://forums.freebsd.org/threads/drm-next-kmod-screen-tearing.66159/#post-390453) [Handbook](https://www.freebsd.org/doc/handbook/x-config.html)<br>
 `# vi /usr/local/etc/X11/xorg.conf.d/driver-intel.conf`
 ```
 Section "Device"
