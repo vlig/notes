@@ -9,18 +9,10 @@ Section "Device"
         Option "TearFree" "true"
 EndSection
 ```
-<details>
-  <summary>Spoiler warning</summary>
-  
-  Spoiler text. Note that it's important to have a space after the summary tag. You should be able to write any markdown you want inside the `<details>` tag... just make sure you close `<details>` afterward.
-  
-  ```javascript
-  console.log("I'm a code block!");
-  ```
-  
-</details>
 #### Файлы конфигурации
-##### /boot/loader.conf
+<details>
+<summary>/boot/loader.conf</summary>
+  
 ```
 autoboot_delay="2"
 aesni_load="YES"
@@ -75,7 +67,10 @@ msdosfs_iconv_load="YES"
 
 vboxdrv_load="YES"
 ```
-##### /etc/rc.conf
+</details>
+<details>
+<summary>/etc/rc.conf</summary>
+
 ```
 hostname="x230"
 wlans_iwn0="wlan0"
@@ -133,7 +128,10 @@ devfs_system_ruleset="system"
 
 sndiod_enable="YES"
 ```
-##### /etc/sysctl.conf
+</details>
+<details>
+<summary>/etc/sysctl.conf</summary>
+
 ```
 #security.bsd.see_other_uids=0
 vfs.zfs.min_auto_ashift=12
@@ -197,3 +195,4 @@ net.inet.tcp.minmss=524
 net.inet.ip.intr_queue_maxlen=2048
 net.route.netisr_maxqlen=2048
 ```
+</details>
