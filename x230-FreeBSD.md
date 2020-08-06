@@ -35,6 +35,7 @@ hccontrol -n ubt0hci create_connection $BT_ADDR_OF_DEVICE && \
 virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/$BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
 ```
 </details>
+
 - - -
 <details>
         <summary>Список эксклюзивно (вручную) установленных пакетов</summary>
