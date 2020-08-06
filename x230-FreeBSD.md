@@ -9,7 +9,7 @@ Section "Device"
         Option "TearFree" "true"
 EndSection
 ```
-#### Файлы конфигурации
+- - -
 <details>
 <summary>/boot/loader.conf</summary>
   
