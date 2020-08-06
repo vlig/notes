@@ -16,13 +16,12 @@ EndSection
 hccontrol -n ubt0hci read_connection_list
 # virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
 ```
-`-t vdsp.ctl` - графический интерфейс __Visual OSS Control__
+`-t vdsp.ctl` - для GUI (__Visual OSS Control__)
 <details>
         <summary>~/bt-sound-term.sh</summary>
         
 ```
-#!/usr/local/bin/bash                                                   
-# bt-sound-term.sh
+#!/usr/local/bin/bash
 BT_ADDR_OF_DEVICE=mifa
 hccontrol -n ubt0hci create_connection $BT_ADDR_OF_DEVICE && \
 virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/$BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
@@ -34,8 +33,8 @@ virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/$BT_
         <summary>Список эксклюзивно (вручную) установленных пакетов</summary>
         
 ```
-$ pkg prime-list                                                     
-Inconsolata-LGC                                                                                                                                                         
+$ pkg prime-list
+Inconsolata-LGC
 archivemount
 atool
 audacious
