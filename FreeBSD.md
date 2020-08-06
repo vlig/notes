@@ -266,8 +266,8 @@ FreeBSD: {
 ###### Вывод информации о еще не установленном пакете
 `pkg search -f имя_пакета`
 
-###### Список эксклюзивно (не вручную) установленных пакетов
-`pkg prime-list` [medium.com/@tdebarbora](https://medium.com/@tdebarbora/freebsd-how-to-backup-list-of-installed-packages-pgkng-859d2b211c02)
+###### Список эксклюзивно (вручную) установленных пакетов
+`pkg prime-list` [medium.com/@tdebarbora](https://medium.com/@tdebarbora/freebsd-how-to-backup-list-of-installed-packages-pgkng-859d2b211c02)<br>
 `pkg query -e '%a = 0' %o | sort` [codenicer.com](http://www.codenicer.com/content/get-list-manually-installed-packages)
 
 ###### Предотвратить переустановку пакета pkg, установленного из портов
