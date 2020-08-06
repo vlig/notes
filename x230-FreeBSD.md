@@ -10,8 +10,8 @@ Section "Device"
 EndSection
 ```
 #### Звук
-##### Bluetooth [Wiki](https://wiki.freebsd.org/SteveWills/BTSpeaker) [Handbook](https://www.freebsd.org/doc/handbook/network-bluetooth.html)
-```
+##### Bluetooth
+[Wiki](https://wiki.freebsd.org/SteveWills/BTSpeaker) [Handbook](https://www.freebsd.org/doc/handbook/network-bluetooth.html)<br>
 `cat ~/bt-sound-term.sh`<br>
 ```
 #!/usr/local/bin/bash
