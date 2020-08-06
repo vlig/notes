@@ -251,7 +251,7 @@ mv /boot/kernel /boot/kernel.bak && mv /boot/kernel.mykernel /boot/kernel   # п
 ###### Определение версии установленных ядeр (например /boot/kernel.old)
 `strings /boot/kernel.old/kernel | tail`<br>
 - - -
-#### РАБОТА С ПОРТАМИ/ПАКЕТАМИ
+#### РАБОТА С ПАКЕТАМИ/ПОРТАМИ
 ```
 /usr/local/etc/pkg/repos/FreeBSD.conf:
 FreeBSD: {
@@ -260,13 +260,14 @@ FreeBSD: {
 ```
 Обновления будут приходить чаще.
 
-###### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
-`cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean` - или внести `M..=yes` в __make.conf__
-
 ###### Поиск пакета с неточно известным названием:
 `pkg search -D <pattern>`
+
 ###### Вывод информации о еще не установленном пакете
 `pkg search -f имя_пакета`
+
+###### Список пакетов, установленных вручную (не как зависимости) [codenicer.com](http://www.codenicer.com/content/get-list-manually-installed-packages)
+`pkg query -e '%a = 0' %o | sort`
 
 ###### Предотвратить переустановку пакета pkg, установленного из портов
 [forums.freebsd.org](https://forums.freebsd.org/threads/pkg-and-options-changed.65535/post-384699)<br>
@@ -285,6 +286,8 @@ FreeBSD: {
 # pkg install -r local -f fusefs-ntfs
 ```
 > Thanks to CONSERVATIVE_UPGRADE pkg will now strongly prefer the local repository over others when looking at mailman and pkg shouldn't try to upgrade it from the FreeBSD repo anymore.
+###### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
+`cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean` - или внести `M..=yes` в __make.conf__
 #### Удалить все установленные порты и пакеты
 [forums.freebsd.org](https://forums.freebsd.org/threads/what-is-the-best-way-to-remove-all-packages-and-start-over.32347/)
 Обновить коллекцию портов<br>
