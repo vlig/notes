@@ -12,22 +12,13 @@ EndSection
 #### Звук
 ##### Bluetooth [Wiki](https://wiki.freebsd.org/SteveWills/BTSpeaker) [Handbook](https://www.freebsd.org/doc/handbook/network-bluetooth.html)
 ```
-# hccontrol -n ubt0hci create_connection BT_ADDR_OF_DEVICE
-hccontrol -n ubt0hci read_connection_list
-# virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
-```
-`-t vdsp.ctl` - для GUI (__Visual OSS Control__)
-<details>
-        <summary>~/bt-sound-term.sh</summary>
-        
+`cat ~/bt-sound-term.sh`<br>
 ```
 #!/usr/local/bin/bash
 BT_ADDR_OF_DEVICE=mifa
 hccontrol -n ubt0hci create_connection $BT_ADDR_OF_DEVICE && \
 virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/$BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
 ```
-</details>
-
 - - -
 <details>
         <summary>Список эксклюзивно (вручную) установленных пакетов</summary>
