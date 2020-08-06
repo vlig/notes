@@ -17,9 +17,9 @@
 `# ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime`
 - - -
 #### СЕТЬ
-[freebsd.org](https://www.freebsd.org/doc/handbook/network-aggregation.html)
+[Handbook](https://www.freebsd.org/doc/handbook/network-aggregation.html)
 ###### WiFi
-[unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [freebsd.org](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
+[unix.stackexchange.com](https://unix.stackexchange.com/a/467381) [Handbook](https://www.freebsd.org/doc/en/books/handbook/network-wireless.html)
 ```
 sysctl net.wlan.devices
 pciconf -lv
@@ -38,7 +38,7 @@ ifconfig wlan0 list scan
 `# dhclient hn0`<br>
 - - -
 #### РАБОТА С ДИСКАМИ
-[linux.cpms.ru](http://linux.cpms.ru/?p=8183) [lists.freebsd.org](https://lists.freebsd.org/pipermail/freebsd-questions/2011-December/236442.html) [rtfm.co.ua](http://rtfm.co.ua/freebsd-gpart-primer-raboty-s-diskami/) [handbook](https://www.freebsd.org/doc/handbook/geom-glabel.html)<br>
+[linux.cpms.ru](http://linux.cpms.ru/?p=8183) [lists.freebsd.org](https://lists.freebsd.org/pipermail/freebsd-questions/2011-December/236442.html) [rtfm.co.ua](http://rtfm.co.ua/freebsd-gpart-primer-raboty-s-diskami/) [Handbook](https://www.freebsd.org/doc/handbook/geom-glabel.html)<br>
 `sysctl kern.disks`   # список подключенных дисков<br>
 `geom disk list`
 `ls /dev/da*`   # список подключённых USB-дисков<br>
@@ -289,7 +289,7 @@ FreeBSD: {
 ###### Ошибка сборки порта. Может возникать при параллельной сборке (make -jX)
 `cd /usr/ports/devel/llvm37 ; make MAKE_JOBS_UNSAFE=yes install clean` - или внести `M..=yes` в __make.conf__
 #### Удалить все установленные порты и пакеты
-[forums.freebsd.org](https://forums.freebsd.org/threads/what-is-the-best-way-to-remove-all-packages-and-start-over.32347/)
+[forums.freebsd.org](https://forums.freebsd.org/threads/what-is-the-best-way-to-remove-all-packages-and-start-over.32347/)<br>
 Обновить коллекцию портов<br>
 ```
 # pkg delete -a`<br>
