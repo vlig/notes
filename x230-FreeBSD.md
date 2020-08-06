@@ -23,14 +23,7 @@ hccontrol -n ubt0hci read_connection_list
 ```
 #!/usr/local/bin/bash                                                   
 # bt-sound-term.sh
-
 BT_ADDR_OF_DEVICE=mifa
-
-function ctrl_c() {
-        echo "** Trapped CTRL-C"
-}
-trap ctrl_c SIGINT
-
 hccontrol -n ubt0hci create_connection $BT_ADDR_OF_DEVICE && \
 virtual_oss -C 2 -c 2 -r 48000 -b 16 -s 1024 -R /dev/null -P /dev/bluetooth/$BT_ADDR_OF_DEVICE -d dsp -t vdsp.ctl
 ```
