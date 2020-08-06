@@ -19,6 +19,7 @@ hccontrol -n ubt0hci read_connection_list
 `-t vdsp.ctl` - графический интерфейс __Visual OSS Control__
 <details>
         <summary>~/bt-sound-term.sh</summary>
+        
 ```
 #!/usr/local/bin/bash                                                   
 # bt-sound-term.sh
