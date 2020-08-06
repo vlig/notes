@@ -9,6 +9,16 @@ Section "Device"
         Option "TearFree" "true"
 EndSection
 ```
+<details>
+  <summary>Spoiler warning</summary>
+  
+  Spoiler text. Note that it's important to have a space after the summary tag. You should be able to write any markdown you want inside the `<details>` tag... just make sure you close `<details>` afterward.
+  
+  ```javascript
+  console.log("I'm a code block!");
+  ```
+  
+</details>
 #### Файлы конфигурации
 ##### /boot/loader.conf
 ```
@@ -123,7 +133,7 @@ devfs_system_ruleset="system"
 
 sndiod_enable="YES"
 ```
-#### /etc/sysctl.conf
+##### /etc/sysctl.conf
 ```
 #security.bsd.see_other_uids=0
 vfs.zfs.min_auto_ashift=12
