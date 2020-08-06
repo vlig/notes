@@ -123,3 +123,67 @@ devfs_system_ruleset="system"
 
 sndiod_enable="YES"
 ```
+#### /etc/sysctl.conf
+```
+#security.bsd.see_other_uids=0
+vfs.zfs.min_auto_ashift=12
+vfs.usermount=1
+net.link.tap.up_on_open=1
+net.inet6.ip6.auto_linklocal=0
+
+#dev.acpi_ibm.0.bluetooth=1 # enabled by default?
+
+# https://cooltrainer.org/a-freebsd-desktop-howto/
+# Enhance shared memory X11 interface
+kern.ipc.shmmax=67108864
+kern.ipc.shmall=32768
+# Enhance desktop responsiveness under high CPU use (200/224)
+kern.sched.preempt_thresh=224
+# Bump up maximum number of open files
+kern.maxfiles=200000
+# Disable PC Speaker
+hw.syscons.bell=0
+kern.vt.enable_bell=0
+# Shared memory for Chromium
+kern.ipc.shm_allow_removed=1
+
+# https://www.c0ffee.net/blog/freebsd-on-a-laptop/
+# increase UFS readahead
+vfs.read_max=128
+# enable IPv6 autoconfiguration
+#net.inet6.ip6.accept_rtadv=1
+# suspend on lid close
+#hw.acpi.lid_switch_state=S3
+# increase the nub's tracking sensitivity - tweak to your liking
+#hw.psm.trackpoint.sensitivity=255
+#hw.psm.trackpoint.upper_plateau=125
+# disable the touchpad
+hw.psm.synaptics.touchpad_off=1
+#hw.psm.synaptics.min_pressure=220
+# some tweaks to boost network performance over long, fat pipes
+net.inet.tcp.cc.algorithm=htcp
+net.inet.tcp.cc.htcp.adaptive_backoff=1
+net.inet.tcp.cc.htcp.rtt_scaling=1
+net.inet.tcp.rfc6675_pipe=1
+net.inet.tcp.syncookies=0
+net.inet.tcp.nolocaltimewait=1
+kern.ipc.soacceptqueue=1024
+kern.ipc.maxsockbuf=8388608
+kern.ipc.maxsockbuf=2097152
+net.inet.tcp.sendspace=262144
+net.inet.tcp.recvspace=262144
+net.inet.tcp.sendbuf_max=16777216
+net.inet.tcp.recvbuf_max=16777216
+net.inet.tcp.sendbuf_inc=32768
+net.inet.tcp.recvbuf_inc=65536
+net.local.stream.sendspace=16384
+net.local.stream.recvspace=16384
+net.inet.raw.maxdgram=16384
+net.inet.raw.recvspace=16384
+net.inet.tcp.abc_l_var=44
+net.inet.tcp.initcwnd_segments=44
+net.inet.tcp.mssdflt=1448
+net.inet.tcp.minmss=524
+net.inet.ip.intr_queue_maxlen=2048
+net.route.netisr_maxqlen=2048
+```
