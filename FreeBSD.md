@@ -218,7 +218,7 @@ make -DALWAYS_CHECK_MAKE installkernel KERNCONF=YOUR_KERNEL_HERE
 Установочные образы: [ftp-archive.freebsd.org](ftp://ftp-archive.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/)
 
 ##### ОБНОВЛЕНИЕ УДАЛЁННО
-[FreeBSD 10 удаленное обновление ядра и мира](http://www.fryaha.ru/freebsd-10-update-world-kernel) [Удаленная сборка и установка ядра FreeBSD](http://vds-admin.ru/freebsd/udalennaya-sborka-i-ustanovka-yadra) [Remote FreeBSD server upgrade - Guide! '09](http://daemonforums.org/showthread.php?t=2836)
+[fryaha.ru](http://www.fryaha.ru/freebsd-10-update-world-kernel) [vds-admin.ru](http://vds-admin.ru/freebsd/udalennaya-sborka-i-ustanovka-yadra) [daemonforums.org](http://daemonforums.org/showthread.php?t=2836)
 ```
 cp -Rp /boot/kernel /boot/kernel.good   # резервная копия текущего (работающего корректно) ядра
 cd /usr/src ; make -j2 buildkernel KERNCONF="MYKERNEL GENERIC"   # последовательная сборка нескольких ядер, если нужно
